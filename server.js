@@ -1,34 +1,48 @@
-const express = require('express');    // Importing Express framework
-const http = require('http');          // Native HTTP server
-const { Server } = require('socket.io'); // Importing Socket.IO for real-time communication
-const path = require('path');          // For handling file paths
+const express = require('express');
+const http = require('http');
+const socketIO = require('socket.io');
+const path = require('path');
 
-const app = express();                 // Initializing the Express app
-const server = http.createServer(app); // Creating an HTTP server
-const io = new Server(server);         // Creating a Socket.IO server
+const app = express();
+const server = http.createServer(app);
+const io = socketIO(server);
 
-// Serve static files from the 'public' folder (will host the frontend here)
+const PORT = process.env.PORT || 3000;
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Socket.IO connection handling
 io.on('connection', (socket) => {
-  console.log('A user connected');  // When a user connects, log it to the console
+  console.log('User connected:', socket.id);
 
-  // Handling a user joining a meeting room
-  socket.on('join-room', (roomId, userId) => {
-    socket.join(roomId);             // Add the user to the specified room
-    socket.to(roomId).emit('user-connected', userId); // Notify other users in the room
+  socket.on('join-meeting', (meetingID) => {
+    socket.join(meetingID);
+    console.log(`User ${socket.id} joined meeting: ${meetingID}`);
+    socket.to(meetingID).emit('user-connected', socket.id);
   });
 
-  // Handling a user disconnecting
+  // Handle offer
+  socket.on('offer', (data) => {
+    console.log('Offer received from:', socket.id, 'to:', data.to);
+    socket.to(data.to).emit('offer', { offer: data.offer, from: socket.id });
+  });
+
+  // Handle answer
+  socket.on('answer', (data) => {
+    console.log('Answer received from:', socket.id, 'to:', data.to);
+    socket.to(data.to).emit('answer', { answer: data.answer, from: socket.id });
+  });
+
+  // Handle ICE candidate
+  socket.on('ice-candidate', (data) => {
+    console.log('ICE candidate received from:', socket.id, 'to:', data.to);
+    socket.to(data.to).emit('ice-candidate', { candidate: data.candidate, from: socket.id });
+  });
+
   socket.on('disconnect', () => {
-    console.log('A user disconnected');
-    // Additional cleanup actions can be added here
+    console.log('User disconnected:', socket.id);
   });
 });
 
-// Starting the server on port 3000 or an environment-defined port
-const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
