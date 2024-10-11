@@ -3,52 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Meet</title>
+    <title>Meeting Platform</title>
+    <script src="/socket.io/socket.io.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        #video-grid {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        video {
-            width: 300px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-        }
-        #room-input {
-            padding: 10px;
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-        #join-btn {
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+        body { font-family: Arial, sans-serif; text-align: center; margin: 0; }
+        h1 { margin-top: 50px; }
+        input, button { padding: 10px; font-size: 16px; margin: 10px; }
+        video { width: 400px; height: auto; margin: 20px 0; }
     </style>
 </head>
 <body>
-    <h1>Welcome to Simple Meet</h1>
-    <div>
-        <input id="room-input" type="text" placeholder="Enter Room ID" />
-        <button id="join-btn">Join Room</button>
+    <h1>Join a Meeting</h1>
+    <label for="meetingID">Meeting ID:</label>
+    <input type="text" id="meetingID" placeholder="Enter Meeting ID">
+    <button onclick="joinMeeting()">Join</button>
+
+    <div id="video-grid">
+        <video id="localVideo" autoplay muted playsinline></video>
     </div>
 
-    <div id="video-grid"></div>
-
-    <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
-
-
-
