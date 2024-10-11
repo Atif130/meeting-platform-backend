@@ -1,44 +1,40 @@
-document.getElementById("sendBtn").addEventListener("click", async function () {
-    let userInput = document.getElementById("userInput").value;
-    if (userInput.trim() === "") return;
+const socket = io('/');
+const videoGrid = document.getElementById('video-grid');
+const myVideo = document.createElement('video');
+myVideo.muted = true;
 
-    // Display the user input
-    let chatbox = document.getElementById("chatbox");
-    let userMessage = document.createElement("div");
-    userMessage.classList.add("message");
-    userMessage.textContent = userInput;
-    chatbox.appendChild(userMessage);
+let myVideoStream;
+navigator.mediaDevices.getUserMedia({
+    video: true,
+    audio: true
+}).then(stream => {
+    myVideoStream = stream;
+    addVideoStream(myVideo, stream);
 
-    // Clear the input field
-    document.getElementById("userInput").value = "";
-
-    // Call OpenAI API
-    let response = await getChatbotResponse(userInput);
-
-    // Display chatbot response
-    let botMessage = document.createElement("div");
-    botMessage.classList.add("message");
-    botMessage.textContent = response;
-    chatbox.appendChild(botMessage);
-
-    chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
+    socket.on('user-connected', userId => {
+        connectToNewUser(userId, stream);
+    });
 });
 
-// Function to get response from OpenAI API
-async function getChatbotResponse(message) {
-    const apiKey = "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"; // Replace with your OpenAI API key
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiKey}`, // Correct string interpolation
-        },
-        body: JSON.stringify({
-            model: "gpt-3.5-turbo", // Specify the GPT model
-            messages: [{ role: "user", content: message }]
-        })
-    });
+socket.on('user-disconnected', userId => {
+    // Handle user disconnection
+});
 
-    const data = await response.json();
-    return data.choices[0].message.content.trim();
+document.getElementById('join-btn').addEventListener('click', () => {
+    const roomId = document.getElementById('room-input').value;
+    if (roomId) {
+        socket.emit('join-room', roomId, Math.random().toString(36).substring(7));
+    }
+});
+
+function addVideoStream(video, stream) {
+    video.srcObject = stream;
+    video.addEventListener('loadedmetadata', () => {
+        video.play();
+    });
+    videoGrid.append(video);
+}
+
+function connectToNewUser(userId, stream) {
+    // Handle peer-to-peer connection with Simple-Peer (add WebRTC functionality here)
 }
