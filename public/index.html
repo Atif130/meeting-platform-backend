@@ -3,224 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meeting Platform</title>
-    <script src="/socket.io/socket.io.js"></script>
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- Google Fonts link -->
+    <title>Focus Force - Pre-Meeting</title>
+
+    <!-- Google Fonts: Avenir Alternative -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 0; }
-        h1 { margin-top: 50px; }
-        input, button { padding: 10px; font-size: 16px; margin: 10px; }
-        video { width: 400px; height: auto; margin: 20px 0; }
-    </style>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <script>
+        function joinMeeting() {
+            const meetingID = document.getElementById('meetingID').value;
+            if (meetingID) {
+                window.location.href = `meeting.html/?roomID=${meetingID}`;
+            } else {
+                alert('Please enter a valid Meeting ID');
+            }
+        }
+    </script>
 </head>
 <body>
-    <h1>Welcome to FocusForce</h1>
-    <p>Real-time collaboration starts here.</p>
-    <h2>Join a Meeting</hw>
-    <label for="meetingID">Meeting ID:</label>
-    <input type="text" id="meetingID" placeholder="Enter Meeting ID">
-    <button onclick="joinMeeting()">Join</button>
+    <div class="container">
+        <h1>Focus Force</h1>
 
-    <div id="video-grid">
-        <video id="localVideo" autoplay muted playsinline></video>
-    </div>
-
-    <div class="controls">
-            <button id="mute-btn">Mute</button>
-            <button id="camera-btn">Camera Off</button>
-            <button id="show-participants-btn">Show Participants</button>
-            <button id="raise-hand-btn">Raise Hand</button>
-            <button id="leave-btn">Leave Meeting</button>
+        <div class="join-section">
+            <h2>Join Meeting</h2>
+            <input type="text" id="meetingID" placeholder="Enter Meeting ID" />
+            <button onclick="joinMeeting()">Join</button>
         </div>
 
-        <div class="arena-chat" data-publisher="bbps-rh" data-chatroom="bbps-rh-global" data-position="in-page"></div><script async src="https://go.arena.im/public/js/arenachatlib.js?p=bbps-rh&e=bbps-rh-global"></script>
+        <div class="or-divider">
+            <span>OR</span>
+        </div>
 
+        <div class="create-section">
+            <button onclick="window.location.href='create-meeting.html'">Create Meeting</button>
+        </div>
 
-        <!-- Participants Section -->
-        <div class="participants-list" id="participants-list" style="display: none;">
-            <h3>Participants</h3>
-            <ul id="participants-ul">
-                <!-- Participants will be dynamically added here -->
-            </ul>
+        <div class="divider"></div>
+
+        <div class="about-section">
+            <button onclick="window.location.href='about.html'">About Focus Force</button>
         </div>
     </div>
-    
-    <div id="root"></div>
-
-        
-    <script src="script.js"></script>
-    <script>
-        const socket = io();
-
-        const localVideo = document.getElementById('local-video');
-        const participantGrid = document.getElementById('participant-grid');
-        const chatBox = document.getElementById('chat-box');
-        const participantsList = document.getElementById('participants-list');
-        const chatMessages = document.getElementById('chat-messages');
-        const participantsUl = document.getElementById('participants-ul');
-
-        let localStream;
-        let isMuted = false;
-        let isCameraOn = true;
-
-        // Step 1: Get user media (audio and video) and display it in the local video element
-        async function startMedia() {
-            try {
-                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                localVideo.srcObject = localStream;
-            } catch (err) {
-                console.error('Error accessing media devices:', err);
-            }
-        }
-        startMedia();
-
-        // Step 2: Socket.io Event Handlers for Joining Meeting and Managing Participants
-        const urlParams = new URLSearchParams(window.location.search);
-        const meetingID = urlParams.get('meetingID');
-        const userName = urlParams.get('userName');
-
-        socket.emit('join-meeting', meetingID, userName);
-
-        // When a new user joins the meeting, add them to the participants list
-        socket.on('user-connected', (data) => {
-            const { userName, userID } = data;
-
-            // Add participant to the participants list
-            const participantItem = document.createElement('li');
-            participantItem.textContent = ${userName} (${userID});
-            participantsUl.appendChild(participantItem);
-
-            // Add remote video element
-            const remoteVideo = document.createElement('video');
-            remoteVideo.classList.add('participant-video');
-            remoteVideo.id = video-${userID};
-            remoteVideo.autoplay = true;
-            participantGrid.appendChild(remoteVideo);
-        });
-
-        // Handle Mute/Unmute button
-        document.getElementById('mute-btn').addEventListener('click', () => {
-            const audioTracks = localStream.getAudioTracks();
-            if (audioTracks.length > 0) {
-                audioTracks[0].enabled = !audioTracks[0].enabled;
-                isMuted = !isMuted;
-                document.getElementById('mute-btn').textContent = isMuted ? 'Unmute' : 'Mute';
-            }
-        });
-
-        // Handle Camera On/Off button
-        document.getElementById('camera-btn').addEventListener('click', () => {
-            const videoTracks = localStream.getVideoTracks();
-            if (videoTracks.length > 0) {
-                videoTracks[0].enabled = !videoTracks[0].enabled;
-                isCameraOn = videoTracks[0].enabled;
-                document.getElementById('camera-btn').textContent = isCameraOn ? 'Camera Off' : 'Camera On';
-            }
-        });
-
-
-        // Show/hide participants
-        document.getElementById('show-participants-btn').addEventListener('click', () => {
-            participantsList.style.display = participantsList.style.display === 'none' ? 'block' : 'none';
-        });
-
-        // Handle Raise Hand functionality
-        document.getElementById('raise-hand-btn').addEventListener('click', () => {
-            socket.emit('raise-hand', { meetingID, userName });
-        });
-
-        // Handle sending chat messages
-        document.getElementById('send-chat-btn').addEventListener('click', () => {
-            const message = document.getElementById('chat-input').value;
-            socket.emit('send-chat', { meetingID, userName, message });
-            document.getElementById('chat-input').value = ''; // Clear input field
-        });
-
-
-        // Handle Leave Meeting functionality
-        document.getElementById('leave-btn').addEventListener('click', () => {
-            socket.emit('leave-meeting', { meetingID, userName });
-            window.location.href = '/';
-        });
-
-        // When a user raises their hand
-        socket.on('user-raised-hand', (data) => {
-            const handRaiseNotification = document.createElement('p');
-            handRaiseNotification.textContent = ${data.userName} raised their hand.;
-            chatMessages.appendChild(handRaiseNotification);
-        });
-
-        // When a user leaves the meeting
-        socket.on('user-disconnected', (data) => {
-            // Remove user from participants list and remove their video element
-            const userVideo = document.getElementById(video-${data.userID});
-            if (userVideo) {
-                userVideo.remove();
-            }
-
-            const participantItems = Array.from(participantsUl.children);
-            participantItems.forEach(item => {
-                if (item.textContent.includes(data.userID)) {
-                    item.remove();
-                }
-            });
-        });
-    </script>
-
-    <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
-    <script>
-    window.onload = function () {
-        function getUrlParams(url) {
-            let urlStr = url.split('?')[1];
-            const urlSearchParams = new URLSearchParams(urlStr);
-            const result = Object.fromEntries(urlSearchParams.entries());
-            return result;
-        }
-
-
-        // Generate a Token by calling a method.
-        // @param 1: appID
-        // @param 2: serverSecret
-        // @param 3: Room ID
-        // @param 4: User ID
-        // @param 5: Username
-        const roomID = getUrlParams(window.location.href)['roomID'] || (Math.floor(Math.random() * 10000) + "");
-        const userID = Math.floor(Math.random() * 10000) + "";
-        const userName = "userName" + userID;
-        const appID = 67019579;
-        const serverSecret = "8046544dc05974b950b3ab00b82b7643";
-        const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
-
-    
-            const zp = ZegoUIKitPrebuilt.create(kitToken);
-            zp.joinRoom({
-                container: document.querySelector("#root"),
-                sharedLinks: [{
-                    name: 'Personal link',
-                    url: window.location.protocol + '//' + window.location.host  + window.location.pathname + '?roomID=' + roomID,
-                }],
-                scenario: {
-                    mode: ZegoUIKitPrebuilt.VideoConference,
-                },
-                
-           	    turnOnMicrophoneWhenJoining: true,
-           	    turnOnCameraWhenJoining: true,
-           	    showMyCameraToggleButton: true,
-           	    showMyMicrophoneToggleButton: true,
-           	    showAudioVideoSettingsButton: true,
-           	    showScreenSharingButton: true,
-           	    showTextChat: true,
-           	    showUserList: true,
-           	    maxUsers: 50,
-           	    layout: "Grid",
-           	    showLayoutButton: true,
-         
-                });
-        }
-        </script>
-
 </body>
 </html>
