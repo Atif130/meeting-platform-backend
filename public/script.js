@@ -129,26 +129,31 @@ socket.on('ice-candidate', data => {
   peer.addIceCandidate(new RTCIceCandidate(data.candidate));
 });
 
-// Mute/Unmute
+// Mute/Unmute functionality
 const muteButton = document.getElementById('mute-btn');
+let isMuted = false;
+
 muteButton.addEventListener('click', () => {
-    const audioTracks = myVideoStream.getAudioTracks();
+    const audioTracks = localStream.getAudioTracks();
     if (audioTracks.length > 0) {
         audioTracks[0].enabled = !audioTracks[0].enabled;
-        muteButton.textContent = audioTracks[0].enabled ? 'Mute' : 'Unmute';
+        isMuted = !isMuted;
+        muteButton.textContent = isMuted ? 'Unmute' : 'Mute';
     }
 });
 
-// Camera On/Off
+// Camera On/Off functionality
 const cameraButton = document.getElementById('camera-btn');
+let isCameraOn = true;
+
 cameraButton.addEventListener('click', () => {
-    const videoTracks = myVideoStream.getVideoTracks();
+    const videoTracks = localStream.getVideoTracks();
     if (videoTracks.length > 0) {
         videoTracks[0].enabled = !videoTracks[0].enabled;
-        cameraButton.textContent = videoTracks[0].enabled ? 'Camera Off' : 'Camera On';
+        isCameraOn = videoTracks[0].enabled;
+        cameraButton.textContent = isCameraOn ? 'Camera Off' : 'Camera On';
     }
 });
-
 
 // Start the media stream for local video
 
