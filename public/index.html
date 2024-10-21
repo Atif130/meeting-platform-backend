@@ -15,7 +15,7 @@
         function joinMeeting() {
             const meetingID = document.getElementById('meetingID').value;
             if (meetingID) {
-                window.location.href = `create-meeting.html/?roomID=${meetingID}`;
+                window.location.href = `create-meeting.html?roomID=${meetingID}`;
             } else {
                 alert('Please enter a valid Meeting ID');
             }
