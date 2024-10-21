@@ -154,3 +154,18 @@ cameraButton.addEventListener('click', () => {
         cameraButton.textContent = isCameraOn ? 'Camera Off' : 'Camera On';
     }
 });
+
+import AgoraUIKit from 'agora-react-uikit';
+ 
+    const App = () => { 
+      const rtcProps = {
+        appId: 'Your App ID', 
+        channel: 'test', 
+        token: null, // enter your channel token as a string 
+      }; 
+      return (
+        <AgoraUIKit rtcProps={rtcProps} /> 
+      ) 
+    };
+    
+    export default App; 
