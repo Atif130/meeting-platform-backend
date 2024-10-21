@@ -147,10 +147,5 @@ const cameraButton = document.getElementById('camera-btn');
 let isCameraOn = true;
 
 cameraButton.addEventListener('click', () => {
-    const videoTracks = localStream.getVideoTracks();
-    if (videoTracks.length > 0) {
-        videoTracks[0].enabled = !videoTracks[0].enabled;
-        isCameraOn = videoTracks[0].enabled;
-        cameraButton.textContent = isCameraOn ? 'Camera Off' : 'Camera On';
-    }
+    cameraButton.textContent = isCameraOn ? 'Camera Off' : 'Camera On';
 });
