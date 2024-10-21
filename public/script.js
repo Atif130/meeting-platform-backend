@@ -222,3 +222,5 @@ function displayMessage(message) {
     chatMessages.appendChild(messageElement);
     chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the latest message
 }
+
+
