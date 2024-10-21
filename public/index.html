@@ -20,9 +20,7 @@
     <input type="text" id="meetingID" placeholder="Enter Meeting ID">
     <button onclick="joinMeeting()">Join</button>
 
-    <div id="video-grid">
-        <video id="localVideo" autoplay muted playsinline></video>
-    </div>
+    <div id="video-grid"></div>
 
     <div class="controls">
         <button id="mute-btn">Mute</button>
@@ -36,9 +34,7 @@
     <!-- Chat Section -->
     <div class="chat-box" id="chat-box" style="display: none;">
         <h3>Chat</h3>
-        <div class="chat-messages" id="chat-messages">
-            <!-- Chat messages will appear here -->
-        </div>
+        <div class="chat-messages" id="chat-messages"></div>
         <input type="text" id="chat-input" placeholder="Type your message here..." />
         <button id="send-chat-btn">Send</button>
     </div>
@@ -46,9 +42,7 @@
     <!-- Participants Section -->
     <div class="participants-list" id="participants-list" style="display: none;">
         <h3>Participants</h3>
-        <ul id="participants-ul">
-            <!-- Participants will be dynamically added here -->
-        </ul>
+        <ul id="participants-ul"></ul>
     </div>
 
     <script src="script.js"></script>
