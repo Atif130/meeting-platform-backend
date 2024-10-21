@@ -31,21 +31,13 @@
     <div class="controls">
             <button id="mute-btn">Mute</button>
             <button id="camera-btn">Camera Off</button>
-            <button id="show-chat-btn">Show Chat</button>
             <button id="show-participants-btn">Show Participants</button>
             <button id="raise-hand-btn">Raise Hand</button>
             <button id="leave-btn">Leave Meeting</button>
         </div>
 
-        <!-- Chat Section -->
-        <div class="chat-box" id="chat-box" style="display: none;">
-            <h3>Chat</h3>
-            <div class="chat-messages" id="chat-messages">
-                <!-- Chat messages will appear here -->
-            </div>
-            <input type="text" id="chat-input" placeholder="Type your message here..." />
-            <button id="send-chat-btn">Send</button>
-        </div>
+        <div class="arena-chat" data-publisher="bbps-rh" data-chatroom="bbps-rh-global" data-position="in-page"></div><script async src="https://go.arena.im/public/js/arenachatlib.js?p=bbps-rh&e=bbps-rh-global"></script>
+
 
         <!-- Participants Section -->
         <div class="participants-list" id="participants-list" style="display: none;">
@@ -126,10 +118,6 @@
             }
         });
 
-        // Show/hide chat
-        document.getElementById('show-chat-btn').addEventListener('click', () => {
-            chatBox.style.display = chatBox.style.display === 'none' ? 'block' : 'none';
-        });
 
         // Show/hide participants
         document.getElementById('show-participants-btn').addEventListener('click', () => {
@@ -148,12 +136,6 @@
             document.getElementById('chat-input').value = ''; // Clear input field
         });
 
-        // Receive chat messages and display them
-        socket.on('receive-chat', (data) => {
-            const chatMessage = document.createElement('p');
-            chatMessage.textContent = ${data.userName}: ${data.message};
-            chatMessages.appendChild(chatMessage);
-        });
 
         // Handle Leave Meeting functionality
         document.getElementById('leave-btn').addEventListener('click', () => {
