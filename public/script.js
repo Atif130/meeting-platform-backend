@@ -156,18 +156,6 @@ cameraButton.addEventListener('click', () => {
 });
 
 // Start the media stream for local video
-let localStream;
-
-async function startMedia() {
-    try {
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        const localVideo = document.getElementById('local-video');
-        localVideo.srcObject = localStream;
-    } catch (err) {
-        console.error('Error accessing media devices:', err);
-    }
-}
-startMedia();
 
 // Toggle Chat visibility
 const showChatButton = document.getElementById('show-chat-btn');
