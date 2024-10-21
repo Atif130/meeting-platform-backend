@@ -1,0 +1,82 @@
+/* Universal Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #e6f5ff; /* Very light sky blue */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container Styling */
+.container {
+    text-align: center;
+    background-color: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 350px;
+}
+
+/* Header Styles */
+h1 {
+    font-weight: 600;
+    color: #003366; /* Deep Blue */
+    font-size: 36px;
+}
+
+h2 {
+    font-weight: 400;
+    color: #00509e; /* Bright Blue */
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Input Field */
+input[type="text"] {
+    padding: 10px;
+    width: 80%;
+    margin-bottom: 20px;
+    border: 2px solid #00509e;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Buttons */
+button {
+    background-color: #00509e;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #003366;
+}
+
+.or-divider {
+    margin: 20px 0;
+    color: #00509e;
+    font-size: 18px;
+}
+
+.divider {
+    margin: 30px 0;
+    border-top: 1px solid #ccc;
+    width: 100%;
+}
+
+.about-section button {
+    background-color: #ff6600;
+    padding: 12px 25px;
+}
+
+.about-section button:hover {
+    background-color: #cc5200;
+}
