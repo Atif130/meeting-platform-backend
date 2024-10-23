@@ -14,7 +14,7 @@ navigator.mediaDevices.getUserMedia({
   myVideoStream = stream;
   addVideoStream(myVideo, stream);
 
-  // Join meeting based on the entered Meeting ID
+  // Join meeting based on the entered Meeting I
   document.getElementById('meetingID').addEventListener('input', function() {
     const meetingID = this.value;
     if (meetingID && !isConnected) {
