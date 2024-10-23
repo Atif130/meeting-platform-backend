@@ -80,3 +80,18 @@ button:hover {
 .about-section button:hover {
     background-color: #cc5200;
 }
+#downloadNotes {
+    display: block; /* Ensure the button is displayed */
+    background-color: #00509e; /* Bright blue for visibility */
+    color: white; /* White text for contrast */
+    padding: 10px 20px; /* Padding to make it look better */
+    border-radius: 5px; /* Rounded corners */
+    text-align: center;
+    margin-top: 20px; /* Add margin if it's too close to other elements */
+    cursor: pointer;
+  }
+  
+  #downloadNotes:hover {
+    background-color: #003366; /* Darker color on hover */
+  }
+  
