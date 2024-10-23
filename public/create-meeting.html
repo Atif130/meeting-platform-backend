@@ -23,9 +23,6 @@
     <p>Real-time collaboration starts here.</p>
     <div id="root"></div>
     
-    <!-- Download Notes Button -->
-    
-
     <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
     <script>
     window.onload = function () {
@@ -126,9 +123,16 @@
             const blob = new Blob([notes], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const downloadButton = document.getElementById('downloadNotes');
-            downloadButton.href = url;
-            downloadButton.download = 'notes.txt';
-            downloadButton.style.display = 'block';
+
+            // Attach click event listener
+            downloadButton.addEventListener('click', function() {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'notes.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            });
         }
     }
     </script>
