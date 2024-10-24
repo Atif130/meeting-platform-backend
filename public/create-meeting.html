@@ -19,6 +19,8 @@
 <body>
     <h1>FocusForce</h1>
     <p>Real-time collaboration starts here.</p>
+    <button id="openTabButton">Open Whiteboard</button>
+    <div id="message">Present screen to show whiteboard</div>
     <div id="root"></div>
 
         
@@ -72,6 +74,13 @@
          
                 });
         }
+        document.getElementById('openTabButton').addEventListener('click', function() {
+            // Open the link in a new tab
+            window.open('https://webwhiteboard.com/', '_blank');
+
+            // Reveal the text message
+            document.getElementById('message').style.display = 'block';
+        });
         </script>
 
 </body>
