@@ -20,16 +20,8 @@
     <h1>FocusForce</h1>
     <p>Real-time collaboration starts here.</p>
     <button id="openTabButton">Open Whiteboard</button>
-    <iframe id="whiteboard" src="https://webwhiteboard.com/board/uXjVLOECFFY=/?boardAccessToken=6qKRvenAQd5vHN8Nn7JfRgTLwKyXCOKu"></iframe>
-    <style>
-        /* Initially hide the iframe */
-        #hiddenIframe {
-            display: none;
-            width: 100%;
-            height: 300px;
-            border: none;
-        }
-    </style>
+    <div id="message">Present screen to show whiteboard</div>
+    <iframe id="whiteboard" src="https://webwhiteboard.com/board/uXjVLOECFFY=/?boardAccessToken=6qKRvenAQd5vHN8Nn7JfRgTLwKyXCOKu" hidden></iframe>
 
     
     <div id="root"></div>
@@ -89,6 +81,8 @@
 
             // Reveal the text message
             document.getElementById('whiteboard').style.display = 'block';
+            document.getElementById('message').style.display = 'block';
+            window.open('https://webwhiteboard.com/board/uXjVLOECFFY=/?boardAccessToken=6qKRvenAQd5vHN8Nn7JfRgTLwKyXCOKu')
         });
         </script>
 
